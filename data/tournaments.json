@@ -8,7 +8,6 @@
             "Borsky",
             "Boruvka",
             "Dvornik",
-            "Elschek",
             "Filgas",
             "Franek",
             "HarvanJ",
@@ -35,7 +34,7 @@
                         "players": [ "Bazger", "Borsky", "Boruvka", "Dvornik" ]
                     },
                     {
-                        "players": [ "Elschek", "Filgas", "Franek", "HarvanJ" ]
+                        "players": [ "Filgas", "Franek", "HarvanJ" ]
                     },
                     {
                         "players": [ "HarvanR", "Hon", "Janousek", "Kucera" ]
@@ -57,7 +56,7 @@
                         "players": [ "Bazger", "Borsky", "Boruvka", "Dvornik" ]
                     },
                     {
-                        "players": [ "Elschek", "Filgas", "Franek", "HarvanJ" ]
+                        "players": [ "Filgas", "Franek", "HarvanJ" ]
                     },
                     {
                         "players": [ "HarvanR", "Hon", "Janousek", "Kucera" ]
@@ -79,7 +78,7 @@
                         "players": [ "Bazger", "Borsky", "Boruvka", "Dvornik" ]
                     },
                     {
-                        "players": [ "Elschek", "Filgas", "Franek", "HarvanJ" ]
+                        "players": [ "Filgas", "Franek", "HarvanJ" ]
                     },
                     {
                         "players": [ "HarvanR", "Hon", "Janousek", "Kucera" ]
@@ -96,23 +95,27 @@
         "teams": [
             {
                 "team": "1",
-                "players": [ "Bazger", "Borsky", "Boruvka", "Dvornik" ]
+                "players": [ "Bazger", "Borsky", "Dvornik" ]
             },
             {
                 "team": "2",
-                "players": [ "Elschek", "Filgas", "Franek", "HarvanJ" ]
+                "players": [ "Filgas", "Franek", "HarvanJ" ]
             },
             {
                 "team": "3",
-                "players": [ "HarvanR", "Hon", "Janousek", "Kucera" ]
+                "players": [ "HarvanR", "Hon", "Janousek" ]
             },
             {
                 "team": "4",
-                "players": [ "Kvasnicka", "Opravil", "Sedlak", "Sobol" ]
+                "players": [ "Kucera", "Kvasnicka", "Opravil" ]
             },
             {
                 "team": "5",
-                "players": [ "Stanek", "ValaJ", "ValaM", "Zboril" ]
+                "players": [ "Sedlak", "Sobol", "Stanek" ]
+            },
+            {
+                "team": "6",
+                "players": [ "ValaJ", "ValaM", "Zboril" ]
             }
         ]
     }
