@@ -31,19 +31,19 @@
                 "active": "1",
                 "flights": [
                     {
-                        "players": [ "Bazger", "Borsky", "Boruvka", "Dvornik" ]
+                        "players": [ "Borsky", "Sobol", "Filgas" ]
                     },
                     {
-                        "players": [ "Filgas", "Franek", "HarvanJ" ]
+                        "players": [ "Bazger", "ValaJ", "HarvanR" ]
                     },
                     {
-                        "players": [ "HarvanR", "Hon", "Janousek", "Kucera" ]
+                        "players": [ "HarvanJ", "Dvornik", "Sedlak", "Opravil" ]
                     },
                     {
-                        "players": [ "Kvasnicka", "Opravil", "Sedlak", "Sobol" ]
+                        "players": [ "Kucera", "Franek", "Hon", "Kvasnicka" ]
                     },
                     {
-                        "players": [ "Stanek", "ValaJ", "ValaM", "Zboril" ]
+                        "players": [ "ValaM", "Zboril", "Janousek", "Stanek" ]
                     }
                 ]
             },
@@ -95,27 +95,27 @@
         "teams": [
             {
                 "team": "1",
-                "players": [ "Bazger", "Borsky", "Dvornik" ]
+                "players": [ "Bazger", "Opravil", "Kvasnicka" ]
             },
             {
                 "team": "2",
-                "players": [ "Filgas", "Franek", "HarvanJ" ]
+                "players": [ "Filgas", "Franek", "Sobol" ]
             },
             {
                 "team": "3",
-                "players": [ "HarvanR", "Hon", "Janousek" ]
+                "players": [ "HarvanR", "Hon", "HarvanJ" ]
             },
             {
                 "team": "4",
-                "players": [ "Kucera", "Kvasnicka", "Opravil" ]
+                "players": [ "Kucera", "Stanek", "Zboril" ]
             },
             {
                 "team": "5",
-                "players": [ "Sedlak", "Sobol", "Stanek" ]
+                "players": [ "Sedlak", "Borsky", "Janousek" ]
             },
             {
                 "team": "6",
-                "players": [ "ValaJ", "ValaM", "Zboril" ]
+                "players": [ "ValaJ", "ValaM", "Dvornik" ]
             }
         ]
     }
