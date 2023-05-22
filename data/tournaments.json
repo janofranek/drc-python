@@ -1,122 +1,218 @@
 {
     "tournaments": [
-    {
-        "id": "Haugschlag 2023",
-        "active": "1",
-        "players": [
-            "Bazger",
-            "Borsky",
-            "Boruvka",
-            "Dvornik",
-            "Filgas",
-            "Franek",
-            "HarvanJ",
-            "HarvanR",
-            "Hon",
-            "Janousek",
-            "Kucera",
-            "Kvasnicka",
-            "Opravil",
-            "Sedlak",
-            "Sobol",
-            "Stanek",
-            "ValaJ",
-            "ValaM",
-            "Zboril"
-        ],
-        "rounds": [
-            {
-                "date": "2023-05-19",
-                "course": "Haugschlag-Haugschlag",
-                "active": "1",
-                "flights": [
-                    {
-                        "players": [ "Borsky", "Sobol", "Filgas" ]
-                    },
-                    {
-                        "players": [ "Bazger", "ValaJ", "HarvanR" ]
-                    },
-                    {
-                        "players": [ "HarvanJ", "Dvornik", "Sedlak", "Opravil" ]
-                    },
-                    {
-                        "players": [ "Kucera", "Franek", "Hon", "Kvasnicka" ]
-                    },
-                    {
-                        "players": [ "ValaM", "Zboril", "Janousek", "Stanek" ]
-                    }
-                ]
-            },
-            {
-                "date": "2023-05-20",
-                "course": "Haugschlag-Waldviertel",
-                "active": "0",
-                "flights": [
-                    {
-                        "players": [ "Bazger", "Borsky", "Boruvka", "Dvornik" ]
-                    },
-                    {
-                        "players": [ "Filgas", "Franek", "HarvanJ" ]
-                    },
-                    {
-                        "players": [ "HarvanR", "Hon", "Janousek", "Kucera" ]
-                    },
-                    {
-                        "players": [ "Kvasnicka", "Opravil", "Sedlak", "Sobol" ]
-                    },
-                    {
-                        "players": [ "Stanek", "ValaJ", "ValaM", "Zboril" ]
-                    }
-                ]
-            },
-            {
-                "date": "2023-05-21",
-                "course": "Haugschlag-Haugschlag",
-                "active": "0",
-                "flights": [
-                    {
-                        "players": [ "Bazger", "Borsky", "Boruvka", "Dvornik" ]
-                    },
-                    {
-                        "players": [ "Filgas", "Franek", "HarvanJ" ]
-                    },
-                    {
-                        "players": [ "HarvanR", "Hon", "Janousek", "Kucera" ]
-                    },
-                    {
-                        "players": [ "Kvasnicka", "Opravil", "Sedlak", "Sobol" ]
-                    },
-                    {
-                        "players": [ "Stanek", "ValaJ", "ValaM", "Zboril" ]
-                    }
-                ]
-            }
-        ],
-        "teams": [
-            {
-                "team": "1",
-                "players": [ "Bazger", "Opravil", "Kvasnicka" ]
-            },
-            {
-                "team": "2",
-                "players": [ "Filgas", "Franek", "Sobol" ]
-            },
-            {
-                "team": "3",
-                "players": [ "HarvanR", "Hon", "HarvanJ" ]
-            },
-            {
-                "team": "4",
-                "players": [ "Kucera", "Stanek", "Zboril" ]
-            },
-            {
-                "team": "5",
-                "players": [ "Sedlak", "Borsky", "Janousek" ]
-            },
-            {
-                "team": "6",
-                "players": [ "ValaJ", "ValaM", "Dvornik" ]
-            }
-        ]
-    }
-]}
+        {
+            "active": "0",
+            "rounds": [
+                {
+                    "active": "0",
+                    "date": "2023-05-19",
+                    "flights": [
+                        {
+                            "players": [
+                                "Borsky",
+                                "Sobol",
+                                "Filgas"
+                            ]
+                        },
+                        {
+                            "players": [
+                                "Bazger",
+                                "ValaJ",
+                                "HarvanR"
+                            ]
+                        },
+                        {
+                            "players": [
+                                "HarvanJ",
+                                "Dvornik",
+                                "Sedlak",
+                                "Opravil"
+                            ]
+                        },
+                        {
+                            "players": [
+                                "Kucera",
+                                "Franek",
+                                "Hon",
+                                "Kvasnicka"
+                            ]
+                        },
+                        {
+                            "players": [
+                                "ValaM",
+                                "Zboril",
+                                "Janousek",
+                                "Stanek"
+                            ]
+                        }
+                    ],
+                    "course": "Haugschlag-Haugschlag"
+                },
+                {
+                    "active": "0",
+                    "date": "2023-05-20",
+                    "flights": [
+                        {
+                            "players": [
+                                "Dvornik",
+                                "ValaJ",
+                                "Stanek"
+                            ]
+                        },
+                        {
+                            "players": [
+                                "ValaM",
+                                "Borsky",
+                                "Opravil",
+                                "Sobol"
+                            ]
+                        },
+                        {
+                            "players": [
+                                "Zboril",
+                                "Bazger",
+                                "Sedlak",
+                                "Kucera"
+                            ]
+                        },
+                        {
+                            "players": [
+                                "Boruvka",
+                                "Franek",
+                                "Filgas",
+                                "HarvanJ"
+                            ]
+                        },
+                        {
+                            "players": [
+                                "Hon",
+                                "Janousek",
+                                "HarvanR",
+                                "Kvasnicka"
+                            ]
+                        }
+                    ],
+                    "course": "Haugschlag-Waldviertel"
+                },
+                {
+                    "active": "1",
+                    "date": "2023-05-21",
+                    "flights": [
+                        {
+                            "players": [
+                                "Boruvka",
+                                "Filgas",
+                                "Sobol"
+                            ]
+                        },
+                        {
+                            "players": [
+                                "HarvanR",
+                                "Janousek",
+                                "Bazger",
+                                "Hon"
+                            ]
+                        },
+                        {
+                            "players": [
+                                "Kucera",
+                                "Zboril",
+                                "Kvasnicka",
+                                "Sedlak"
+                            ]
+                        },
+                        {
+                            "players": [
+                                "Dvornik",
+                                "ValaM",
+                                "Franek",
+                                "Borsky"
+                            ]
+                        },
+                        {
+                            "players": [
+                                "ValaJ",
+                                "HarvanJ",
+                                "Opravil",
+                                "Stanek"
+                            ]
+                        }
+                    ],
+                    "course": "Haugschlag-Haugschlag"
+                }
+            ],
+            "teams": [
+                {
+                    "name": "Kva\u0161\u00e1ci",
+                    "players": [
+                        "Bazger",
+                        "Opravil",
+                        "Kvasnicka"
+                    ]
+                },
+                {
+                    "name": "El Capo",
+                    "players": [
+                        "Filgas",
+                        "Franek",
+                        "Sobol"
+                    ]
+                },
+                {
+                    "name": "H3",
+                    "players": [
+                        "HarvanR",
+                        "Hon",
+                        "HarvanJ"
+                    ]
+                },
+                {
+                    "name": "Dealers",
+                    "players": [
+                        "Kucera",
+                        "Stanek",
+                        "Zboril"
+                    ]
+                },
+                {
+                    "name": "Bombers",
+                    "players": [
+                        "Sedlak",
+                        "Borsky",
+                        "Janousek"
+                    ]
+                },
+                {
+                    "name": "Savignon",
+                    "players": [
+                        "ValaJ",
+                        "ValaM",
+                        "Dvornik"
+                    ]
+                }
+            ],
+            "players": [
+                "Bazger",
+                "Borsky",
+                "Boruvka",
+                "Dvornik",
+                "Filgas",
+                "Franek",
+                "HarvanJ",
+                "HarvanR",
+                "Hon",
+                "Janousek",
+                "Kucera",
+                "Kvasnicka",
+                "Opravil",
+                "Sedlak",
+                "Sobol",
+                "Stanek",
+                "ValaJ",
+                "ValaM",
+                "Zboril"
+            ],
+            "id": "Haugschlag 2023"
+        }
+    ]
+}

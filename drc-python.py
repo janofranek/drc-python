@@ -85,14 +85,33 @@ def load_data(config, firestore_client):
         if os.path.isfile(fullname) and fnmatch.fnmatch(fname, "*.xlsx"):
             process_excel_file(fullname, firestore_client)
 
+def backup_coll(config, coll):
+    #backup one collection
+    fullname = os.path.join(config["BACKUP_PATH"], coll.id + ".json")
+    docs = coll.get()
+    data = []
+    for doc in docs:
+        doc_data = doc.to_dict()
+        doc_data['id'] = doc.id
+        data.append(doc_data)
+    backup = {}
+    backup[coll.id] = data
+    with open(fullname, 'w') as file:
+        json.dump(backup, file, indent=4)
+
+def backup_data(config, firestore_client):
+    #find collections to process and then process them
+    for coll in firestore_client.collections():
+        backup_coll(config, coll)
+
 def generate_scorecards(config, firestore_client):
     tournaments = read_json_file(os.path.join(config["DATA_PATH"], "tournaments.json"))
     scorecards_ref = firestore_client.collection("scorecards")
     holes = []
     for i in range(18): 
-        holes[i] = { "hole": i+1, score: 0}
-    for r in tournaments.tournaments.rounds:
-        for p in tournaments.tournaments.players:
+        holes.append({ "hole": i+1, "score": 0})
+    for r in tournaments[0].rounds:
+        for p in tournaments[0].players:
             doc_ref = scorecards_ref.document(r.date + " " + p)
             #TODO - insert only if not exists 
             doc_ref.set( { "course": r.course, "player": p, "tee": "yellow", "holes": holes} )
@@ -122,6 +141,7 @@ except Exception as e:
 # define the dictionary mapping cases to functions
 actions = {
     "load": load_data,
+    "backup": backup_data,
     "scorecards": generate_scorecards,
 }
 
