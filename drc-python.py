@@ -117,6 +117,26 @@ def generate_scorecards(config, firestore_client):
             doc_ref.set( { "course": r.course, "player": p, "tee": "yellow", "holes": holes} )
 
     return
+
+def generate_matches_day(matches_ref, date, matches_count):
+    empty_match = { "holes": [], "players_lat": [], "players_stt": [], "final": False, "result": "", "final_score": 0 }
+    for i in range(matches_count):
+        doc_ref = matches_ref.document(date + "-" + f"{i:02d}")
+        doc_ref.set(empty_match)
+
+
+def generate_matches_2023(config, firestore_client):
+    matches_ref = firestore_client.collection("matches")
+    generate_matches_day(matches_ref, "2023-09-01", 6)
+    generate_matches_day(matches_ref, "2023-09-02", 6)
+    generate_matches_day(matches_ref, "2023-09-03", 11)
+
+def generate_matches_2024(config, firestore_client):
+    matches_ref = firestore_client.collection("matches")
+    generate_matches_day(matches_ref, "2024-08-30", 6)
+    generate_matches_day(matches_ref, "2024-08-31", 6)
+    generate_matches_day(matches_ref, "2024-09-01", 11)
+
 #MAIN
 
 #command line parameters
@@ -143,6 +163,8 @@ actions = {
     "load": load_data,
     "backup": backup_data,
     "scorecards": generate_scorecards,
+    "matches2023": generate_matches_2023,
+    "matches2024": generate_matches_2024
 }
 
 # get the function corresponding to the case
