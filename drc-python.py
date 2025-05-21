@@ -104,20 +104,6 @@ def backup_data(config, firestore_client):
     for coll in firestore_client.collections():
         backup_coll(config, coll)
 
-def generate_scorecards(config, firestore_client):
-    tournaments = read_json_file(os.path.join(config["DATA_PATH"], "tournaments.json"))
-    scorecards_ref = firestore_client.collection("scorecards")
-    holes = []
-    for i in range(18): 
-        holes.append({ "hole": i+1, "score": 0})
-    for r in tournaments[0].rounds:
-        for p in tournaments[0].players:
-            doc_ref = scorecards_ref.document(r.date + " " + p)
-            #TODO - insert only if not exists 
-            doc_ref.set( { "course": r.course, "player": p, "tee": "yellow", "holes": holes} )
-
-    return
-
 def generate_matches_day(matches_ref, date, matches_count):
     empty_match = { "holes": [], "players_lat": [], "players_stt": [], "final": False, "result": "", "final_score": 0 }
     for i in range(matches_count):
@@ -137,39 +123,38 @@ def generate_matches_2024(config, firestore_client):
     generate_matches_day(matches_ref, "2024-08-31", 6)
     generate_matches_day(matches_ref, "2024-09-01", 11)
 
-#MAIN
+if __name__ == "__main__":
 
-#command line parameters
-if len(sys.argv) < 2:
-    print("Missing argument")
-    exit()
-    
-action = sys.argv[1].lower()
+    #command line parameters
+    if len(sys.argv) < 2:
+        print("Missing argument")
+        exit()
+        
+    action = sys.argv[1].lower()
 
-#read configuration
-config = dotenv_values(".env")
+    #read configuration
+    config = dotenv_values(".env")
 
-#Firebase connection
-try:
-    cred = firebase_admin.credentials.Certificate(config["FIREBASE_CRED"])
-    firebase_admin.initialize_app(cred)
-    firestore_client = firestore.client()
-except Exception as e:
-    print(f"Error connecting to Firebase: {e}")
-    exit()
+    #Firebase connection
+    try:
+        cred = firebase_admin.credentials.Certificate(config["FIREBASE_CRED"])
+        firebase_admin.initialize_app(cred)
+        firestore_client = firestore.client()
+    except Exception as e:
+        print(f"Error connecting to Firebase: {e}")
+        exit()
 
-# define the dictionary mapping cases to functions
-actions = {
-    "load": load_data,
-    "backup": backup_data,
-    "scorecards": generate_scorecards,
-    "matches2023": generate_matches_2023,
-    "matches2024": generate_matches_2024
-}
+    # define the dictionary mapping cases to functions
+    actions = {
+        "load": load_data,
+        "backup": backup_data,
+        "matches2023": generate_matches_2023,
+        "matches2024": generate_matches_2024
+    }
 
-# get the function corresponding to the case
-selected_action = actions.get(action, lambda: "Invalid case")
+    # get the function corresponding to the case
+    selected_action = actions.get(action, lambda: "Invalid case")
 
-# call the function
-selected_action(config, firestore_client)
+    # call the function
+    selected_action(config, firestore_client)
 
