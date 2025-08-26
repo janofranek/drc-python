@@ -1,11 +1,22 @@
 import os
 import sys
 import fnmatch
+
+# Set environment variables before importing Firebase
+# These help with gRPC thread cleanup issues
+os.environ['GRPC_ENABLE_FORK_SUPPORT'] = '0'
+os.environ['GRPC_POLL_STRATEGY'] = 'poll'
+
 from dotenv import dotenv_values
 import firebase_admin
 from firebase_admin import firestore
 import json
 import pandas
+import warnings
+import signal
+
+# Suppress the specific threading warnings that occur during shutdown
+warnings.filterwarnings("ignore", message=".*NoneType.*context manager.*", category=RuntimeWarning)
 
 def process_excel_sheet(sheet, data, firestore_client):
 
@@ -33,7 +44,7 @@ def process_excel_file(fname, firestore_client):
         xlsdata = pandas.read_excel(fname, sheet_name = None)
     except Exception as e:
         print(f"Error reading XLSX file: {e}")
-        exit()
+        sys.exit(1)
 
     # Each sheet represents collection
     for key in xlsdata:
@@ -42,21 +53,17 @@ def process_excel_file(fname, firestore_client):
     return
 
 def read_json_file(fname):
-    #load file
+    # load file and read JSON with proper resource cleanup
     try:
-        f = open(fname, "r", encoding="utf-8")
+        with open(fname, "r", encoding="utf-8") as f:
+            try:
+                return json.load(f)
+            except Exception as e:
+                print(f"Error reading JSON file: {e}")
+                sys.exit(1)
     except Exception as e:
         print(f"Error opening file: {e}")
-        exit()
-
-    #read json
-    try:
-        data = json.load(f)
-    except Exception as e:
-        print(f"Error reading JSON file: {e}")
-        exit()
-
-    return data
+        sys.exit(1)
 
 def process_json_file(fname, firestore_client):
 
@@ -129,12 +136,22 @@ def generate_matches_2025(config, firestore_client):
     generate_matches_day(matches_ref, "2025-08-30", 6)
     generate_matches_day(matches_ref, "2025-08-31", 12)
 
+def signal_handler(signum, frame):
+    """Handle interrupt signals gracefully"""
+    print("\nReceived interrupt signal, cleaning up...")
+    sys.exit(0)
+
 if __name__ == "__main__":
+
+  # Register signal handlers for graceful shutdown
+    signal.signal(signal.SIGINT, signal_handler)
+    if hasattr(signal, 'SIGTERM'):
+        signal.signal(signal.SIGTERM, signal_handler)
 
     #command line parameters
     if len(sys.argv) < 2:
         print("Missing argument")
-        exit()
+        sys.exit(1)
         
     action = sys.argv[1].lower()
 
@@ -142,13 +159,15 @@ if __name__ == "__main__":
     config = dotenv_values(".env")
 
     #Firebase connection
+    firestore_client = None
+    app = None
     try:
         cred = firebase_admin.credentials.Certificate(config["FIREBASE_CRED"])
-        firebase_admin.initialize_app(cred)
+        app = firebase_admin.initialize_app(cred)
         firestore_client = firestore.client()
     except Exception as e:
         print(f"Error connecting to Firebase: {e}")
-        exit()
+        sys.exit(1)
 
     # define the dictionary mapping cases to functions
     actions = {
@@ -162,6 +181,23 @@ if __name__ == "__main__":
     # get the function corresponding to the case
     selected_action = actions.get(action, lambda: "Invalid case")
 
-    # call the function
-    selected_action(config, firestore_client)
-
+    # call the function and ensure Firebase app is cleaned up
+    try:
+        selected_action(config, firestore_client)
+        print("Operation completed successfully")
+        
+    except Exception as e:
+        print(f"Error during operation: {e}")
+        
+    finally:
+        # Cleanup
+        try:
+            if firestore_client and hasattr(firestore_client, 'close'):
+                firestore_client.close()
+            if app:
+                firebase_admin.delete_app(app)
+        except:
+            pass
+        
+        # Force exit to avoid threading cleanup issues
+        os._exit(0)
