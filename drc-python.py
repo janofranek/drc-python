@@ -123,6 +123,12 @@ def generate_matches_2024(config, firestore_client):
     generate_matches_day(matches_ref, "2024-08-31", 6)
     generate_matches_day(matches_ref, "2024-09-01", 11)
 
+def generate_matches_2025(config, firestore_client):
+    matches_ref = firestore_client.collection("matches")
+    generate_matches_day(matches_ref, "2025-08-29", 6)
+    generate_matches_day(matches_ref, "2025-08-30", 6)
+    generate_matches_day(matches_ref, "2025-08-31", 12)
+
 if __name__ == "__main__":
 
     #command line parameters
@@ -149,7 +155,8 @@ if __name__ == "__main__":
         "load": load_data,
         "backup": backup_data,
         "matches2023": generate_matches_2023,
-        "matches2024": generate_matches_2024
+        "matches2024": generate_matches_2024,
+        "matches2025": generate_matches_2025
     }
 
     # get the function corresponding to the case
