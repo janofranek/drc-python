@@ -1,6 +1,7 @@
 import os
 import sys
 import fnmatch
+import argparse
 
 # Set environment variables before importing Firebase
 # These help with gRPC thread cleanup issues
@@ -111,6 +112,50 @@ def backup_data(config, firestore_client):
     for coll in firestore_client.collections():
         backup_coll(config, coll)
 
+def delete_collection(coll_ref, batch_size):
+    # helper for cleanup
+    docs = coll_ref.limit(batch_size).stream()
+    count = 0
+
+    for doc in docs:
+        doc.reference.delete()
+        count = count + 1
+
+    if count >= batch_size:
+        return delete_collection(coll_ref, batch_size)
+
+def restore_coll(config, coll_name, data, firestore_client):
+    print(f"Restoring collection: {coll_name}")
+    coll_ref = firestore_client.collection(coll_name)
+    
+    # Delete existing data
+    delete_collection(coll_ref, 100)
+
+    # Restore data
+    for element in data:
+        id = element.pop("id", None)
+        if id:
+            doc_ref = coll_ref.document(id)
+            doc_ref.set(element)
+    return
+
+def restore_data(config, firestore_client):
+    #find collections to process and then process them
+    for fname in os.listdir(config["BACKUP_PATH"]):
+        fullname = os.path.join(config["BACKUP_PATH"], fname)
+        if os.path.isfile(fullname) and fnmatch.fnmatch(fname, "*.json"):
+            # The collection name is the filename without extension
+            coll_name = os.path.splitext(fname)[0]
+            try:
+                with open(fullname, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+                    # The backup format is { "collection_name": [ ... data ... ] }
+                    # We need to extract the list of data
+                    rows = data.get(coll_name, [])
+                    restore_coll(config, coll_name, rows, firestore_client)
+            except Exception as e:
+                print(f"Error restoring file {fname}: {e}")
+
 def generate_matches_day(matches_ref, date, matches_count):
     empty_match = { "holes": [], "players_lat": [], "players_stt": [], "final": False, "result": "", "final_score": 0 }
     for i in range(matches_count):
@@ -149,14 +194,17 @@ if __name__ == "__main__":
         signal.signal(signal.SIGTERM, signal_handler)
 
     #command line parameters
-    if len(sys.argv) < 2:
-        print("Missing argument")
-        sys.exit(1)
-        
-    action = sys.argv[1].lower()
+    parser = argparse.ArgumentParser(description='DRC Python Script')
+    parser.add_argument('action', type=str, help='Action to perform')
+    parser.add_argument('--env', type=str, default='test', choices=['test', 'prod'], help='Environment to use (test or prod)')
+    
+    args = parser.parse_args()
+    action = args.action.lower()
 
     #read configuration
-    config = dotenv_values(".env")
+    env_file = f".env.{args.env}"
+    print(f"Loading configuration from {env_file}")
+    config = dotenv_values(env_file)
 
     #Firebase connection
     firestore_client = None
@@ -173,6 +221,7 @@ if __name__ == "__main__":
     actions = {
         "load": load_data,
         "backup": backup_data,
+        "restore": restore_data,
         "matches2023": generate_matches_2023,
         "matches2024": generate_matches_2024,
         "matches2025": generate_matches_2025
