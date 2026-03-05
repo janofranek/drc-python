@@ -156,6 +156,26 @@ def restore_data(config, firestore_client):
             except Exception as e:
                 print(f"Error restoring file {fname}: {e}")
 
+def backup_courses(config, firestore_client):
+    coll = firestore_client.collection("courses")
+    print(f"Backing up collection: {coll.id}")
+    backup_coll(config, coll)
+
+def restore_courses(config, firestore_client):
+    print("Restoring collection: courses")
+    fname = "courses.json"
+    fullname = os.path.join(config["BACKUP_PATH"], fname)
+    if os.path.isfile(fullname):
+        try:
+            with open(fullname, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+                rows = data.get("courses", [])
+                restore_coll(config, "courses", rows, firestore_client)
+        except Exception as e:
+            print(f"Error restoring file {fname}: {e}")
+    else:
+        print(f"Backup file {fullname} not found.")
+
 def generate_matches_day(matches_ref, date, matches_count):
     empty_match = { "holes": [], "players_lat": [], "players_stt": [], "final": False, "result": "", "final_score": 0 }
     for i in range(matches_count):
@@ -180,6 +200,44 @@ def generate_matches_2025(config, firestore_client):
     generate_matches_day(matches_ref, "2025-08-29", 6)
     generate_matches_day(matches_ref, "2025-08-30", 6)
     generate_matches_day(matches_ref, "2025-08-31", 12)
+
+def transform(config, firestore_client):
+    tournaments_ref = firestore_client.collection("tournaments")
+    tournaments = tournaments_ref.stream()
+    for tournament in tournaments:
+        print(f"Transforming tournament: {tournament.id}")
+        data = tournament.to_dict()
+        updates = {}
+
+        if "active" in data:
+            old_active = data["active"]
+            if not isinstance(old_active, bool):
+                if old_active == "0" or old_active == 0:
+                    new_active = False
+                else:
+                    new_active = True
+                updates["active"] = new_active
+
+        if "rounds" in data and isinstance(data["rounds"], list):
+            rounds = data["rounds"]
+            rounds_updated = False
+            for r in rounds:
+                if isinstance(r, dict) and "active" in r:
+                    old_r_active = r["active"]
+                    if not isinstance(old_r_active, bool):
+                        if old_r_active == "0" or old_r_active == 0:
+                            new_r_active = False
+                        else:
+                            new_r_active = True
+                        
+                        r["active"] = new_r_active
+                        rounds_updated = True
+            
+            if rounds_updated:
+                updates["rounds"] = rounds
+        
+        if updates:
+            tournament.reference.update(updates)
 
 def signal_handler(signum, frame):
     """Handle interrupt signals gracefully"""
@@ -222,9 +280,12 @@ if __name__ == "__main__":
         "load": load_data,
         "backup": backup_data,
         "restore": restore_data,
+        "backup_courses": backup_courses,
+        "restore_courses": restore_courses,
         "matches2023": generate_matches_2023,
         "matches2024": generate_matches_2024,
-        "matches2025": generate_matches_2025
+        "matches2025": generate_matches_2025,
+        "transform": transform
     }
 
     # get the function corresponding to the case

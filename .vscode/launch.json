@@ -12,7 +12,7 @@
       "console": "integratedTerminal",
       "justMyCode": true,
       "args": [
-        "restore",
+        "backup_courses",
         "--env",
         "test"
       ]
@@ -25,7 +25,7 @@
       "console": "integratedTerminal",
       "justMyCode": true,
       "args": [
-        "backup",
+        "restore_courses",
         "--env",
         "prod"
       ]
