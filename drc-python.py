@@ -239,6 +239,21 @@ def transform(config, firestore_client):
         if updates:
             tournament.reference.update(updates)
 
+def transform2(config, firestore_client):
+    collections = ["matches", "scorecards"]
+    for coll_name in collections:
+        print(f"Transforming collection: {coll_name}")
+        coll_ref = firestore_client.collection(coll_name)
+        docs = coll_ref.stream()
+        for doc in docs:
+            doc_id = doc.id
+            if len(doc_id) >= 10:
+                date_val = doc_id[:10]
+                # Check if it looks like a date YYYY-MM-DD
+                if date_val.count("-") == 2 and len(date_val) == 10:
+                    print(f"Updating {coll_name} document {doc_id} with date {date_val}")
+                    doc.reference.update({"date": date_val})
+
 def signal_handler(signum, frame):
     """Handle interrupt signals gracefully"""
     print("\nReceived interrupt signal, cleaning up...")
@@ -285,7 +300,8 @@ if __name__ == "__main__":
         "matches2023": generate_matches_2023,
         "matches2024": generate_matches_2024,
         "matches2025": generate_matches_2025,
-        "transform": transform
+        "transform": transform,
+        "transform2": transform2
     }
 
     # get the function corresponding to the case
